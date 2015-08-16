@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhTalk.Common", "EhTalk.Common\EhTalk.Common.csproj", "{11C9A4BB-1C2F-4D93-9161-29B488C30972}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhTalk.Send", "EhTalk.Send\EhTalk.Send.csproj", "{1B9AEFE4-CD0A-47C6-BB4A-F1E3704B03AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhTalk.Receive", "EhTalk.Receive\EhTalk.Receive.csproj", "{02349064-F2C1-4D4A-AD56-FD972AA067FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhTalk.Peek", "EhTalk.Peek\EhTalk.Peek.csproj", "{8AFC1E1F-7862-4582-8F91-8D632F914551}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhTalk.Error", "EhTalk.Error\EhTalk.Error.csproj", "{71350607-8398-4586-A965-7F1F25C2CEBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11C9A4BB-1C2F-4D93-9161-29B488C30972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11C9A4BB-1C2F-4D93-9161-29B488C30972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11C9A4BB-1C2F-4D93-9161-29B488C30972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11C9A4BB-1C2F-4D93-9161-29B488C30972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B9AEFE4-CD0A-47C6-BB4A-F1E3704B03AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B9AEFE4-CD0A-47C6-BB4A-F1E3704B03AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B9AEFE4-CD0A-47C6-BB4A-F1E3704B03AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B9AEFE4-CD0A-47C6-BB4A-F1E3704B03AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02349064-F2C1-4D4A-AD56-FD972AA067FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02349064-F2C1-4D4A-AD56-FD972AA067FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02349064-F2C1-4D4A-AD56-FD972AA067FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02349064-F2C1-4D4A-AD56-FD972AA067FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AFC1E1F-7862-4582-8F91-8D632F914551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AFC1E1F-7862-4582-8F91-8D632F914551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AFC1E1F-7862-4582-8F91-8D632F914551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AFC1E1F-7862-4582-8F91-8D632F914551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71350607-8398-4586-A965-7F1F25C2CEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71350607-8398-4586-A965-7F1F25C2CEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71350607-8398-4586-A965-7F1F25C2CEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71350607-8398-4586-A965-7F1F25C2CEBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
