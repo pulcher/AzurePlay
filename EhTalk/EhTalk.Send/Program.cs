@@ -7,8 +7,8 @@ namespace EhTalk.Send
 {
     class Program
     {
-        static string eventHubName = "rpidemo";
-        static string connectionString = "Endpoint=sb://rpidemo-ns.servicebus.windows.net/;SharedAccessKeyName=SendRule;SharedAccessKey=OvP3AP8dXkR8Wm2hSGOTaAcV2FamGU3WC2VN6wJqGE8=";
+        static string eventHubName = "ndc";
+        static string connectionString = "Endpoint=sb://ndc-stone.servicebus.windows.net/;SharedAccessKeyName=sendOnly;SharedAccessKey=UfAVhYksHcTTo9zRZMFrCkfk8IQZAqbIBfH6I8nUTek=";
 
         static void Main(string[] args)
         {
@@ -27,7 +27,7 @@ namespace EhTalk.Send
                 {
                     var message = Guid.NewGuid().ToString();
                     Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, message);
-                    eventHubClient.Send(new EventData(Encoding.UTF8.GetBytes(message)));
+                    eventHubClient.SendBatchAsync(new EventData(Encoding.UTF8.GetBytes(message)));
                 }
                 catch (Exception exception)
                 {

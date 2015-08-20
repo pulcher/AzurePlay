@@ -35,8 +35,8 @@ namespace EhTalk.Common
             {
                 string data = Encoding.UTF8.GetString(eventData.GetBytes());
 
-                Console.WriteLine(string.Format("Message received.  Partition: '{0}', Data: '{1}'",
-                    context.Lease.PartitionId, data));
+                Console.WriteLine(string.Format("Message received.  Partition: '{0}', Group: {1}, Data: '{2}'",
+                    context.Lease.PartitionId, context.ConsumerGroupName, data));
             }
 
             //Call checkpoint every 5 minutes, so that worker can resume processing from the 5 minutes back if it restarts.
