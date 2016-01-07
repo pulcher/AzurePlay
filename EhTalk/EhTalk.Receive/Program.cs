@@ -8,8 +8,8 @@ namespace EhTalk.Receive
     {
         static void Main(string[] args)
         {
-            string eventHubConnectionString = "Endpoint=sb://ndc-stone.servicebus.windows.net/;SharedAccessKeyName=readOnly;SharedAccessKey=0xNMcWxGKloH2g+wftrHrv1oiKYybrIe6qGvW4CGyG8=";
-            string eventHubName = "ndc";
+            string eventHubConnectionString = "Endpoint=sb://ehcool.servicebus.windows.net/;SharedAccessKeyName=ReaderDude;SharedAccessKey=4vf2vvtPVwUF39feTGI6bUaixNGL2K1kgtvfUTS+RWo=";
+            string eventHubName = "coolness";
             string storageAccountName = "pulchereventhubstorage";
             string storageAccountKey = "7DBdiHW1JI8eIOiaZam37J8VVOvyrvrc+rTP5rIz2w0JDshbybv/+fbjwM63xEPQ5px+ejelThoIPVJHer5 + Gg == ";
             string storageConnectionString = string.Format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}",

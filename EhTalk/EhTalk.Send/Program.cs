@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Microsoft.ServiceBus.Messaging;
@@ -7,8 +8,8 @@ namespace EhTalk.Send
 {
     class Program
     {
-        static string eventHubName = "ndc";
-        static string connectionString = "Endpoint=sb://ndc-stone.servicebus.windows.net/;SharedAccessKeyName=sendOnly;SharedAccessKey=UfAVhYksHcTTo9zRZMFrCkfk8IQZAqbIBfH6I8nUTek=";
+        static string eventHubName = "coolness";
+        static string connectionString = "Endpoint=sb://ehcool.servicebus.windows.net/;SharedAccessKeyName=WriterGal;SharedAccessKey=ZLofsvMetwK/yUSMP9fIF/RwdeiDZJOpSWETyTsDYcg=";
 
         static void Main(string[] args)
         {
@@ -27,7 +28,7 @@ namespace EhTalk.Send
                 {
                     var message = Guid.NewGuid().ToString();
                     Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, message);
-                    eventHubClient.SendBatchAsync(new EventData(Encoding.UTF8.GetBytes(message)));
+                    eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(message)));
                 }
                 catch (Exception exception)
                 {
