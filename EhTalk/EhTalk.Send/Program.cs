@@ -8,8 +8,8 @@ namespace EhTalk.Send
 {
     class Program
     {
-        static string eventHubName = "coolness";
-        static string connectionString = "Endpoint=sb://ehcool.servicebus.windows.net/;SharedAccessKeyName=WriterGal;SharedAccessKey=ZLofsvMetwK/yUSMP9fIF/RwdeiDZJOpSWETyTsDYcg=";
+        static string eventHubName = "<hub name>";
+        static string connectionString = "<writer connection string>";
 
         static void Main(string[] args)
         {
