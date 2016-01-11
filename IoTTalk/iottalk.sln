@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iottalk", "iottalk\iottalk.csproj", "{70D91434-E877-492B-BE4A-855FEA74179D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTTalk.CreateDevice", "IoTTalk.CreateDevice\IoTTalk.CreateDevice.csproj", "{1E5CC0C6-F2E1-47CA-A604-0807BAE0252F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTTalk.DeviceToCloud", "IoTTalk.DeviceToCloud\IoTTalk.DeviceToCloud.csproj", "{9A398241-151F-4BBA-A62F-C9C357E1A6FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IotTalk.SimulatedDevice", "IotTalk.SimulatedDevice\IotTalk.SimulatedDevice.csproj", "{8550A8AB-C2CB-46DB-BDC0-D8EBC51DBA17}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70D91434-E877-492B-BE4A-855FEA74179D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70D91434-E877-492B-BE4A-855FEA74179D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70D91434-E877-492B-BE4A-855FEA74179D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70D91434-E877-492B-BE4A-855FEA74179D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E5CC0C6-F2E1-47CA-A604-0807BAE0252F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E5CC0C6-F2E1-47CA-A604-0807BAE0252F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E5CC0C6-F2E1-47CA-A604-0807BAE0252F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E5CC0C6-F2E1-47CA-A604-0807BAE0252F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A398241-151F-4BBA-A62F-C9C357E1A6FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A398241-151F-4BBA-A62F-C9C357E1A6FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A398241-151F-4BBA-A62F-C9C357E1A6FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A398241-151F-4BBA-A62F-C9C357E1A6FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8550A8AB-C2CB-46DB-BDC0-D8EBC51DBA17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8550A8AB-C2CB-46DB-BDC0-D8EBC51DBA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8550A8AB-C2CB-46DB-BDC0-D8EBC51DBA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8550A8AB-C2CB-46DB-BDC0-D8EBC51DBA17}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
