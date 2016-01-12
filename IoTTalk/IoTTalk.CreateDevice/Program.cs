@@ -24,20 +24,34 @@ namespace IoTTalk.CreateDevice
 
         private async static Task AddDeviceAsync()
         {
-            var deviceId = "myIotDevice";
-            Device device;
+            var simulatedDeviceId = "myIotDevice";
+            Device simulatedDevice;
+
+            var uwpDeviceId = "uwpDevice";
+            Device uwpDevice;
 
             try
             {
-                device = await registryManager.AddDeviceAsync(new Device(deviceId));
+                simulatedDevice = await registryManager.AddDeviceAsync(new Device(simulatedDeviceId));
             }
             catch (DeviceAlreadyExistsException)
             {
-                device = await registryManager.GetDeviceAsync(deviceId);
+                simulatedDevice = await registryManager.GetDeviceAsync(simulatedDeviceId);
                 Console.WriteLine("Retrievig existing device id");
             }
 
-            Console.WriteLine("Device key: {0}", device.Authentication.SymmetricKey.PrimaryKey);
+            try
+            {
+                uwpDevice = await registryManager.AddDeviceAsync(new Device(uwpDeviceId));
+            }
+            catch (DeviceAlreadyExistsException)
+            {
+                uwpDevice = await registryManager.GetDeviceAsync(uwpDeviceId);
+                Console.WriteLine("Retrievig existing device id");
+            }
+
+            Console.WriteLine("Simulated Device key: {0}", simulatedDevice.Authentication.SymmetricKey.PrimaryKey);
+            Console.WriteLine("Uwp Device key: {0}", uwpDevice.Authentication.SymmetricKey.PrimaryKey);
         }
     }
 }
