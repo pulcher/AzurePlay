@@ -7,7 +7,25 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="269*"/>
+            <RowDefinition Height="115*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="475,374,474,144.345">
+            <StackPanel Width="75">
+                <TextBlock Text="Light"></TextBlock>
+                <TextBlock Text="Temp"></TextBlock>
+                <TextBlock Text="Acceleration"></TextBlock>
+                <TextBlock Text="Analog"></TextBlock>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Name="LightTextBox" />
+                <TextBlock Name="TempBox" />
+                <TextBlock Name="AccelBox" />
+                <TextBlock Name="AnalogBox" />
+            </StackPanel>
+        </StackPanel>
+        <TextBlock Name="ErrorBox" Text="All good" Grid.Row="1"></TextBlock>
     </Grid>
 </Page>
