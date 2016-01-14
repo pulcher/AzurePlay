@@ -9,21 +9,22 @@
 
     <Grid Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="269*"/>
-            <RowDefinition Height="115*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="115"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="475,374,474,144.345">
-            <StackPanel Width="75">
-                <TextBlock Text="Light"></TextBlock>
-                <TextBlock Text="Temp"></TextBlock>
-                <TextBlock Text="Acceleration"></TextBlock>
-                <TextBlock Text="Analog"></TextBlock>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" 
+                    VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Text="Light"        FontSize="48" Margin="15"></TextBlock>
+                <TextBlock Text="Temp"         FontSize="48" Margin="15"></TextBlock>
+                <TextBlock Text="Acceleration" FontSize="48" Margin="15"></TextBlock>
+                <TextBlock Text="Analog"       FontSize="48" Margin="15"></TextBlock>
             </StackPanel>
             <StackPanel>
-                <TextBlock Name="LightTextBox" />
-                <TextBlock Name="TempBox" />
-                <TextBlock Name="AccelBox" />
-                <TextBlock Name="AnalogBox" />
+                <TextBlock Name="LightTextBox"  FontSize="48" Margin="15"/>
+                <TextBlock Name="TempBox"       FontSize="48" Margin="15"/>
+                <TextBlock Name="AccelBox"      FontSize="48" Margin="15"/>
+                <TextBlock Name="AnalogBox"     FontSize="48" Margin="15"/>
             </StackPanel>
         </StackPanel>
         <TextBlock Name="ErrorBox" Text="All good" Grid.Row="1"></TextBlock>

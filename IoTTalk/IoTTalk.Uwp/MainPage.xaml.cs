@@ -11,6 +11,7 @@ namespace IoTTalk.Uwp
     {
         private FEZHAT _hat;
         private DispatcherTimer _timer;
+        static string connectionString = "HostName=ddnugIotHub.azure-devices.net;DeviceId=uwpDevice;SharedAccessKey=lSqRxjSGYYNrwpbGkQXSjG9CA/MY/u9yqosnLYAvD44=";
         static string iotHubUri = "pulcherIotHub.azure-devices.net";
         static string deviceId = "uwpDevice";
         static string deviceKey = "ERWU6n6lZVzNqw+42k3Vip0tOmmJGr1OiSSgYzp5j5Q=";
@@ -59,13 +60,10 @@ namespace IoTTalk.Uwp
 
                 _hat.GetAcceleration(out x, out y, out z);
                 
-                UpdateScreen();
-                SendDeviceToCloudMessagesAsync();
+                //SendDeviceToCloudMessagesAsync();
             }
-            else
-            {
-                LightTextBox.Text = "N/A";
-            }
+
+            UpdateScreen();
         }
 
         private void UpdateScreen()
@@ -78,9 +76,10 @@ namespace IoTTalk.Uwp
 
         static async void SendDeviceToCloudMessagesAsync()
         {
-            var deviceClient = DeviceClient.Create(iotHubUri,
-                AuthenticationMethodFactory.CreateAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey),
-                TransportType.Http1);
+            //var deviceClient = DeviceClient.Create(iotHubUri,
+            //    AuthenticationMethodFactory.CreateAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey),
+            //    TransportType.Http1);
+            var deviceClient = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Http1);
 
             var package = $"{{lightLevel: {lightLevel}, temp: {temp:N3}, analog: {analog:N2}, x: {x}, y: {y}, z: {z} }}";
             var message = new Message(Encoding.ASCII.GetBytes(package));
