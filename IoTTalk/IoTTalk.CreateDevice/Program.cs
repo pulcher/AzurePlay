@@ -11,7 +11,7 @@ namespace IoTTalk.CreateDevice
     class Program
     {
         static RegistryManager registryManager;
-        static string connectionString = "HostName=pulcherIotHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=UJEaQv58HeIEyO6iwqUkgl0s2LIuEbTHjdLVBTxAUMI=";
+        static string connectionString = "HostName=ddnugIotHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=wP/ckbU+J/QTkfmtKGtqXwWdVp+moboBj5nNdzKBbcs=";
 
         static void Main(string[] args)
         {

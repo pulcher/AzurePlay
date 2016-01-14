@@ -12,15 +12,17 @@ namespace IotTalk.SimulatedDevice
     class Program
     {
         static DeviceClient deviceClient;
-        static string iotHubUri = "pulcherIotHub.azure-devices.net";
-        static string deviceKey = "gFjOKTCukqFGP/icY4BoGTae7M0pTF5fNY2DBjSgHvQ=";
+        static string connectionString = "HostName=ddnugIotHub.azure-devices.net;DeviceId=myIotDevice;SharedAccessKey=7dTDunyelkD6VWHXnpqqrsIWSWQK1WSxc3UbheTKvgQ=";
+        //static string iotHubUri = "ddnugIotHub.azure-devices.net";
+        //static string deviceKey = "m230f0zWdI+WC2YImQte63zeEpgEVU6TB8jUcIbsnwU=";
         static string deviceId = "myIotDevice";
 
         static void Main(string[] args)
         {
             Console.WriteLine("Simulated device:\n");
 
-            deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey));
+            deviceClient = DeviceClient.CreateFromConnectionString(connectionString);
+            //deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey));
 
             SendDeviceToCloudMessagesAsync();
 
@@ -54,28 +56,3 @@ namespace IotTalk.SimulatedDevice
         }
     }
 }
-
-/*
-<Page x:Class="FEZHATDemo.MainPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="using:App1" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
-    <StackPanel Orientation="Horizontal" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel Width="75">
-            <TextBlock Text="Light: " />
-            <TextBlock Text="Temp: " />
-            <TextBlock Text="Accel: " />
-            <TextBlock Text="Button 18: " />
-            <TextBlock Text="Button 22: " />
-            <TextBlock Text="Leds: " />
-            <TextBlock Text="Analog: " />
-        </StackPanel>
-        <StackPanel>
-            <TextBlock Name="LightTextBox" />
-            <TextBlock Name="TempTextBox" />
-            <TextBlock Name="AccelTextBox" />
-            <TextBlock Name="Button18TextBox" />
-            <TextBlock Name="Button22TextBox" />
-            <TextBlock Name="LedsTextBox" />
-            <TextBlock Name="AnalogTextBox" />
-        </StackPanel>
-    </StackPanel>
-</Page
-    */

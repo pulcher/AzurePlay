@@ -9,7 +9,7 @@ namespace IoTTalk.DeviceToCloud
 {
     class Program
     {
-        static string connectionString = "HostName=pulcherIotHub.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=MVJKENE2nN+g8J4w4EnSq8RIVDwSA3DjYmXaLUItF7A=";
+        static string connectionString = "HostName=ddnugIotHub.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=RBkZQjQzBm5HiqqRyDUfIbNGX2yeoCDroBtarhRP3/c=";
         static string iotHubD2cEndpoint = "messages/events";
         static EventHubClient eventHubClient;
 
