@@ -24,7 +24,7 @@ namespace IoTTalk.Uwp
 
             Setup();
 
-            SendDeviceToCloudMessagesAsync(_deviceClient);
+            //SendDeviceToCloudMessagesAsync();
         }
 
         private async void Setup()
@@ -59,7 +59,7 @@ namespace IoTTalk.Uwp
                 _hat.GetAcceleration(out x, out y, out z);
             }
 
-            SendDeviceToCloudMessagesAsync(_deviceClient);
+            SendDeviceToCloudMessagesAsync();
             UpdateScreen();
         }
 
@@ -71,12 +71,12 @@ namespace IoTTalk.Uwp
             AccelBox.Text = $"({x:N2}, {y:N2}, {z:N2})";
         }
 
-        static async void SendDeviceToCloudMessagesAsync(DeviceClient deviceClient)
+        static async void SendDeviceToCloudMessagesAsync()
         {
             //var deviceClient = DeviceClient.Create(iotHubUri,
             //    AuthenticationMethodFactory.CreateAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey),
             //    TransportType.Http1);
-            //var deviceClient = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Http1);
+            var deviceClient = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Http1);
 
             var package = $"{{lightLevel: {lightLevel}, temp: {temp:N3}, analog: {analog:N2}, x: {x}, y: {y}, z: {z} }}";
             var message = new Message(Encoding.ASCII.GetBytes(package));
