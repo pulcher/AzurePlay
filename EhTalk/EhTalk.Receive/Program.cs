@@ -8,10 +8,10 @@ namespace EhTalk.Receive
     {
         static void Main(string[] args)
         {
-            string eventHubConnectionString = "<reader connection string>";
-            string eventHubName = "<hub name>";
-            string storageAccountName = "<storage account name";
-            string storageAccountKey = "<storage account key>";
+            string eventHubConnectionString = "Endpoint=sb://trustme.servicebus.windows.net/;SharedAccessKeyName=writer;SharedAccessKey=I/1xJXFJIQ3cITHvhRrvskGtRaGzB0F6/lGMgEWjE1g=";
+            string eventHubName = "nddtest";
+            string storageAccountName = "pulcherstorage1";
+            string storageAccountKey = "8KAT7HqDpKNKltJ5u/OXEyMHPeyKUueEDhr5Lw3uEe3Xp4jqO201Pk2ZrH2/XvegXOkfSytm4R8APmgNfNastg==";
             string storageConnectionString = string.Format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}",
             storageAccountName, storageAccountKey);
 
