@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhTalk.Common", "EhTalk.Common\EhTalk.Common.csproj", "{11C9A4BB-1C2F-4D93-9161-29B488C30972}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhTalk.Peek", "EhTalk.Peek\EhTalk.Peek.csproj", "{8AFC1E1F-7862-4582-8F91-8D632F914551}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhTalk.Error", "EhTalk.Error\EhTalk.Error.csproj", "{71350607-8398-4586-A965-7F1F25C2CEBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhTalk.GameClient", "EhTalk.GameClient\EhTalk.GameClient.csproj", "{7035BE9C-520D-4EAD-B119-3DC5919BA727}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{71350607-8398-4586-A965-7F1F25C2CEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71350607-8398-4586-A965-7F1F25C2CEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71350607-8398-4586-A965-7F1F25C2CEBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7035BE9C-520D-4EAD-B119-3DC5919BA727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7035BE9C-520D-4EAD-B119-3DC5919BA727}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7035BE9C-520D-4EAD-B119-3DC5919BA727}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7035BE9C-520D-4EAD-B119-3DC5919BA727}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
