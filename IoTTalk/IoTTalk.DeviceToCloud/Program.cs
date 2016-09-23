@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IotTalk.Common;
+using Microsoft.Azure.Devices;
 using Microsoft.ServiceBus.Messaging;
+using Newtonsoft.Json;
 
 namespace IoTTalk.DeviceToCloud
 {
@@ -41,7 +42,20 @@ namespace IoTTalk.DeviceToCloud
 
                 var data = Encoding.UTF8.GetString(eventData.GetBytes());
 
+                var otherData = JsonConvert.DeserializeObject<SensorPayload>(data); //new Message(eventData.GetBytes());
+
+                var sysproperties = new StringBuilder();
+
+                foreach(var item in eventData.SystemProperties)
+                {
+                    sysproperties.Append($"key: {item.Key} ");
+                    sysproperties.Append($"value: {item.Value}\n");
+                }
+                var deviceId = eventData.SystemProperties["iothub-connection-device-id"];
+
                 Console.WriteLine("Message received. Partition: {0} Data: {1}", partition, data);
+                Console.WriteLine($"Device Id: {deviceId}");
+                Console.WriteLine(sysproperties.ToString());
             }
         }
     }

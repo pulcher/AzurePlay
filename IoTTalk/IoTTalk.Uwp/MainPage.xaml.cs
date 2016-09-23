@@ -6,16 +6,12 @@ using System.Text;
 using GHIElectronics.UWP.Shields;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
+using Newtonsoft.Json;
 
 namespace IoTTalk.Uwp
 {
     public sealed partial class MainPage : Page
     {
-        //const string BgDay = "Honeydew";
-        //const string BgNight = "Indigo";
-        //const string FgDay = "DarkViolet";
-        //const string FgNight = "Gold";
-
         static string connectionString = "HostName=pulcher.azure-devices.net;DeviceId=p-rpi3-demo;SharedAccessKey=Vj6zwPb3Ht1mbY3R7i/weLYzafDT2A0VU+1/keX0i5Q=";
         static string deviceId = "p-rpi3-demo";
         static double lightLevel, x, y, z, temp, analog;
@@ -115,8 +111,20 @@ namespace IoTTalk.Uwp
 
         static async void SendDeviceToCloudMessagesAsync(DeviceClient deviceClient)
         {
-            var package = $"{{lightLevel: {lightLevel}, temp: {temp:N3}, analog: {analog:N2}, x: {x}, y: {y}, z: {z} }}";
-            var message = new Message(Encoding.ASCII.GetBytes(package));
+            var package = $"{{LightLevel: {lightLevel}, Temp: {temp:N3}, Analog: {analog:N2}, X: {x}, Y: {y}, Z: {z} }}";
+            var sensorPayload = new SensorPayload
+            {
+                LightLevel = lightLevel,
+                Temp = temp,
+                Analog = analog,
+                X = x,
+                Y = y,
+                Z = z
+            };
+
+            var jsonPackage = JsonConvert.SerializeObject(sensorPayload);
+
+            var message = new Message(Encoding.ASCII.GetBytes(jsonPackage));
 
             if(deviceClient != null)
                 await deviceClient.SendEventAsync(message);
@@ -126,15 +134,20 @@ namespace IoTTalk.Uwp
         static async void ReceiveCommands(DeviceClient deviceClient)
         {
             Message receivedMessage = null;
-            string messageData;
+            string data;
 
                 if (deviceClient != null)
                     receivedMessage = await deviceClient.ReceiveAsync();
                
             if(receivedMessage != null)
             {
-                messageData = Encoding.ASCII.GetString(receivedMessage.GetBytes());
-                _receivedCommand = messageData;
+                data = Encoding.ASCII.GetString(receivedMessage.GetBytes());
+                var otherData = JsonConvert.DeserializeObject<CommandPayload>(data);
+
+                if (!string.IsNullOrEmpty(otherData.Message))
+                    _nightMode = otherData.Mode;
+
+                _receivedCommand = data;
                 await deviceClient.CompleteAsync(receivedMessage);
             }
             else
@@ -142,6 +155,38 @@ namespace IoTTalk.Uwp
                 //receivedCommand = "No Command";
             }
 
+        }
+
+        public class CommandPayload
+        {
+            public string Message {
+                get; set;
+            }
+            public bool Mode {
+                get; set;
+            }
+        }
+
+        public class SensorPayload
+        {
+            public double LightLevel {
+                get; set;
+            }
+            public double Temp {
+                get; set;
+            }
+            public double Analog {
+                get; set;
+            }
+            public double X {
+                get; set;
+            }
+            public double Y {
+                get; set;
+            }
+            public double Z {
+                get; set;
+            }
         }
     }
 }
