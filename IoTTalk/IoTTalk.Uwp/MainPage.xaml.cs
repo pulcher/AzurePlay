@@ -4,24 +4,31 @@ using Windows.UI.Xaml.Controls;
 using Microsoft.Azure.Devices.Client;
 using System.Text;
 using GHIElectronics.UWP.Shields;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
 
 namespace IoTTalk.Uwp
 {
     public sealed partial class MainPage : Page
     {
-        private FEZHAT _hat;
-        private DispatcherTimer _timer;
+        //const string BgDay = "Honeydew";
+        //const string BgNight = "Indigo";
+        //const string FgDay = "DarkViolet";
+        //const string FgNight = "Gold";
+
         static string connectionString = "HostName=pulcher.azure-devices.net;DeviceId=p-rpi3-demo;SharedAccessKey=Vj6zwPb3Ht1mbY3R7i/weLYzafDT2A0VU+1/keX0i5Q=";
-        //static string iotHubUri = "pulcherIotHub.azure-devices.net";
         static string deviceId = "p-rpi3-demo";
-        //static string deviceKey = "ERWU6n6lZVzNqw+42k3Vip0tOmmJGr1OiSSgYzp5j5Q=";
         static double lightLevel, x, y, z, temp, analog;
         static DeviceClient _deviceClient;
-        static string receivedCommand = "blah";
+        static bool _nightMode = false;
+        static string _receivedCommand = "blah";
+
+        private FEZHAT _hat;
+        private DispatcherTimer _timer;
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             Setup();
 
@@ -41,7 +48,6 @@ namespace IoTTalk.Uwp
             }
 
             _deviceClient = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Http1);
-            // _deviceClient = DeviceClient.CreateFromConnectionString(connectionString,);
 
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromMilliseconds(2000);
@@ -68,12 +74,43 @@ namespace IoTTalk.Uwp
 
         private void UpdateScreen()
         {
+            if(_nightMode)
+            {
+                LightTextBox.Foreground = new SolidColorBrush(Colors.Gold);
+                TempBox.Foreground      = new SolidColorBrush(Colors.Gold);
+                AnalogBox.Foreground    = new SolidColorBrush(Colors.Gold);
+                AccelBox.Foreground     = new SolidColorBrush(Colors.Gold);
+
+                LblLightTextBox.Foreground = new SolidColorBrush(Colors.Gold);
+                LblTempBox.Foreground      = new SolidColorBrush(Colors.Gold);
+                LblAnalogBox.Foreground    = new SolidColorBrush(Colors.Gold);
+                LblAccelBox.Foreground     = new SolidColorBrush(Colors.Gold);
+
+                MainGrid.Background     = new SolidColorBrush(Colors.Indigo);
+            }
+            else
+            {
+                LightTextBox.Foreground = new SolidColorBrush(Colors.DarkViolet);
+                TempBox.Foreground      = new SolidColorBrush(Colors.DarkViolet);
+                AnalogBox.Foreground    = new SolidColorBrush(Colors.DarkViolet);
+                AccelBox.Foreground     = new SolidColorBrush(Colors.DarkViolet);
+
+                LblLightTextBox.Foreground = new SolidColorBrush(Colors.DarkViolet);
+                LblTempBox.Foreground      = new SolidColorBrush(Colors.DarkViolet);
+                LblAnalogBox.Foreground    = new SolidColorBrush(Colors.DarkViolet);
+                LblAccelBox.Foreground     = new SolidColorBrush(Colors.DarkViolet);
+
+                MainGrid.Background = new SolidColorBrush(Colors.Honeydew);
+            }
+
+            var f = (temp * 9)/ 5.0 + 32;
+
             LightTextBox.Text = lightLevel.ToString("P2");
-            TempBox.Text = temp.ToString("N3");
+            TempBox.Text = $"{temp.ToString("N2")}C ({f.ToString("N2")}F)";
             AnalogBox.Text = analog.ToString("N2");
             AccelBox.Text = $"({x:N2}, {y:N2}, {z:N2})";
 
-            ErrorBox.Text = receivedCommand;
+            ErrorBox.Text = _receivedCommand;
         }
 
         static async void SendDeviceToCloudMessagesAsync(DeviceClient deviceClient)
@@ -97,7 +134,7 @@ namespace IoTTalk.Uwp
             if(receivedMessage != null)
             {
                 messageData = Encoding.ASCII.GetString(receivedMessage.GetBytes());
-                receivedCommand = messageData;
+                _receivedCommand = messageData;
                 await deviceClient.CompleteAsync(receivedMessage);
             }
             else
