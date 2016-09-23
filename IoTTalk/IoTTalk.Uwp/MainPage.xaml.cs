@@ -78,11 +78,6 @@ namespace IoTTalk.Uwp
 
         static async void SendDeviceToCloudMessagesAsync(DeviceClient deviceClient)
         {
-            //var deviceClient = DeviceClient.Create(iotHubUri,
-            //    AuthenticationMethodFactory.CreateAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey),
-            //    TransportType.Http1);
-            //var deviceClient = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Http1);
-
             var package = $"{{lightLevel: {lightLevel}, temp: {temp:N3}, analog: {analog:N2}, x: {x}, y: {y}, z: {z} }}";
             var message = new Message(Encoding.ASCII.GetBytes(package));
 

@@ -7,24 +7,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="White">
+    <Grid Name="MainGrid" Background="White" BorderThickness="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="115"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" 
-                    VerticalAlignment="Center">
-            <StackPanel>
-                <TextBlock Text="Light"        FontSize="48" Margin="15"></TextBlock>
-                <TextBlock Text="Temp"         FontSize="48" Margin="15"></TextBlock>
-                <TextBlock Text="Acceleration" FontSize="48" Margin="15"></TextBlock>
-                <TextBlock Text="Analog"       FontSize="48" Margin="15"></TextBlock>
+                    VerticalAlignment="Center" BorderThickness="2" Margin="30,38,0,31" Width="1842" Height="886">
+            <StackPanel BorderThickness="2" Width="775">
+                <TextBlock Text="Light"        FontSize="128" Margin="15"/>
+                <TextBlock Text="Temp"         FontSize="128" Margin="15"/>
+                <TextBlock Text="Acceleration" FontSize="128" Margin="15"/>
+                <TextBlock Text="Analog"       FontSize="128" Margin="15"/>
             </StackPanel>
-            <StackPanel>
-                <TextBlock Name="LightTextBox"  FontSize="48" Margin="15"/>
-                <TextBlock Name="TempBox"       FontSize="48" Margin="15"/>
-                <TextBlock Name="AccelBox"      FontSize="48" Margin="15"/>
-                <TextBlock Name="AnalogBox"     FontSize="48" Margin="15"/>
+            <StackPanel BorderThickness="2" Width="988">
+                <TextBlock Name="LightTextBox"  FontSize="128" Margin="15"/>
+                <TextBlock Name="TempBox"       FontSize="128" Margin="15"/>
+                <TextBlock Name="AccelBox"      FontSize="128" Margin="15"/>
+                <TextBlock Name="AnalogBox"     FontSize="128" Margin="15"/>
             </StackPanel>
         </StackPanel>
         <TextBlock Name="ErrorBox" Text="All good" Grid.Row="1"></TextBlock>
