@@ -12,10 +12,10 @@ namespace IotTalk.SimulatedDevice
     class Program
     {
         static DeviceClient deviceClient;
-        static string connectionString = "HostName=ddnugIotHub.azure-devices.net;DeviceId=myIotDevice;SharedAccessKey=7dTDunyelkD6VWHXnpqqrsIWSWQK1WSxc3UbheTKvgQ=";
+        static string connectionString = "HostName=pulcher.azure-devices.net;DeviceId=p-virtual-sender;SharedAccessKey=txb5Kob1N6IWGCiWmhPPJwuxa5etzr2cCgzlgryZNPM=";
         //static string iotHubUri = "ddnugIotHub.azure-devices.net";
         //static string deviceKey = "m230f0zWdI+WC2YImQte63zeEpgEVU6TB8jUcIbsnwU=";
-        static string deviceId = "myIotDevice";
+        static string deviceId = "p-virtual-send";
 
         static void Main(string[] args)
         {

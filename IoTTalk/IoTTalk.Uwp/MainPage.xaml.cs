@@ -4,23 +4,27 @@ using Windows.UI.Xaml.Controls;
 using Microsoft.Azure.Devices.Client;
 using System.Text;
 using GHIElectronics.UWP.Shields;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
+using Newtonsoft.Json;
 
 namespace IoTTalk.Uwp
 {
     public sealed partial class MainPage : Page
     {
-        private FEZHAT _hat;
-        private DispatcherTimer _timer;
-        static string connectionString = "HostName=ddnugIotHub.azure-devices.net;DeviceId=uwpDevice;SharedAccessKey=lSqRxjSGYYNrwpbGkQXSjG9CA/MY/u9yqosnLYAvD44=";
-        //static string iotHubUri = "pulcherIotHub.azure-devices.net";
-        static string deviceId = "uwpDevice";
-        //static string deviceKey = "ERWU6n6lZVzNqw+42k3Vip0tOmmJGr1OiSSgYzp5j5Q=";
+        static string connectionString = "HostName=pulcher.azure-devices.net;DeviceId=p-rpi3-demo;SharedAccessKey=Vj6zwPb3Ht1mbY3R7i/weLYzafDT2A0VU+1/keX0i5Q=";
+        static string deviceId = "p-rpi3-demo";
         static double lightLevel, x, y, z, temp, analog;
         static DeviceClient _deviceClient;
+        static bool _nightMode = false;
+        static string _receivedCommand = "blah";
+
+        private FEZHAT _hat;
+        private DispatcherTimer _timer;
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             Setup();
 
@@ -33,7 +37,7 @@ namespace IoTTalk.Uwp
             {
                 _hat = await FEZHAT.CreateAsync();
             }
-            catch (Exception)
+            catch(Exception)
             {
 
                 ErrorBox.Text = "Could not initialize Hat";
@@ -49,9 +53,9 @@ namespace IoTTalk.Uwp
 
         private void OnTick(object sender, object e)
         {
-            if (_hat != null)
+            if(_hat != null)
             {
-                
+
                 lightLevel = _hat.GetLightLevel();
                 temp = _hat.GetTemperature();
                 analog = _hat.ReadAnalog(FEZHAT.AnalogPin.Ain1);
@@ -60,28 +64,129 @@ namespace IoTTalk.Uwp
             }
 
             SendDeviceToCloudMessagesAsync(_deviceClient);
+            ReceiveCommands(_deviceClient);
             UpdateScreen();
         }
 
         private void UpdateScreen()
         {
+            if(_nightMode)
+            {
+                LightTextBox.Foreground = new SolidColorBrush(Colors.Gold);
+                TempBox.Foreground      = new SolidColorBrush(Colors.Gold);
+                AnalogBox.Foreground    = new SolidColorBrush(Colors.Gold);
+                AccelBox.Foreground     = new SolidColorBrush(Colors.Gold);
+
+                LblLightTextBox.Foreground = new SolidColorBrush(Colors.Gold);
+                LblTempBox.Foreground      = new SolidColorBrush(Colors.Gold);
+                LblAnalogBox.Foreground    = new SolidColorBrush(Colors.Gold);
+                LblAccelBox.Foreground     = new SolidColorBrush(Colors.Gold);
+
+                MainGrid.Background     = new SolidColorBrush(Colors.Indigo);
+            }
+            else
+            {
+                LightTextBox.Foreground = new SolidColorBrush(Colors.DarkViolet);
+                TempBox.Foreground      = new SolidColorBrush(Colors.DarkViolet);
+                AnalogBox.Foreground    = new SolidColorBrush(Colors.DarkViolet);
+                AccelBox.Foreground     = new SolidColorBrush(Colors.DarkViolet);
+
+                LblLightTextBox.Foreground = new SolidColorBrush(Colors.DarkViolet);
+                LblTempBox.Foreground      = new SolidColorBrush(Colors.DarkViolet);
+                LblAnalogBox.Foreground    = new SolidColorBrush(Colors.DarkViolet);
+                LblAccelBox.Foreground     = new SolidColorBrush(Colors.DarkViolet);
+
+                MainGrid.Background = new SolidColorBrush(Colors.Honeydew);
+            }
+
+            var f = (temp * 9)/ 5.0 + 32;
+
             LightTextBox.Text = lightLevel.ToString("P2");
-            TempBox.Text = temp.ToString("N3");
+            TempBox.Text = $"{temp.ToString("N2")}C ({f.ToString("N2")}F)";
             AnalogBox.Text = analog.ToString("N2");
             AccelBox.Text = $"({x:N2}, {y:N2}, {z:N2})";
+
+            ErrorBox.Text = _receivedCommand;
         }
 
         static async void SendDeviceToCloudMessagesAsync(DeviceClient deviceClient)
         {
-            //var deviceClient = DeviceClient.Create(iotHubUri,
-            //    AuthenticationMethodFactory.CreateAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey),
-            //    TransportType.Http1);
-            //var deviceClient = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Http1);
+            var package = $"{{LightLevel: {lightLevel}, Temp: {temp:N3}, Analog: {analog:N2}, X: {x}, Y: {y}, Z: {z} }}";
+            var sensorPayload = new SensorPayload
+            {
+                LightLevel = lightLevel,
+                Temp = temp,
+                Analog = analog,
+                X = x,
+                Y = y,
+                Z = z
+            };
 
-            var package = $"{{lightLevel: {lightLevel}, temp: {temp:N3}, analog: {analog:N2}, x: {x}, y: {y}, z: {z} }}";
-            var message = new Message(Encoding.ASCII.GetBytes(package));
+            var jsonPackage = JsonConvert.SerializeObject(sensorPayload);
 
-            await deviceClient.SendEventAsync(message);
+            var message = new Message(Encoding.ASCII.GetBytes(jsonPackage));
+
+            if(deviceClient != null)
+                await deviceClient.SendEventAsync(message);
+        }
+
+        // Receive messages from IoT Hub
+        static async void ReceiveCommands(DeviceClient deviceClient)
+        {
+            Message receivedMessage = null;
+            string data;
+
+                if (deviceClient != null)
+                    receivedMessage = await deviceClient.ReceiveAsync();
+               
+            if(receivedMessage != null)
+            {
+                data = Encoding.ASCII.GetString(receivedMessage.GetBytes());
+                var otherData = JsonConvert.DeserializeObject<CommandPayload>(data);
+
+                if (!string.IsNullOrEmpty(otherData.Message))
+                    _nightMode = otherData.Mode;
+
+                _receivedCommand = data;
+                await deviceClient.CompleteAsync(receivedMessage);
+            }
+            else
+            {
+                //receivedCommand = "No Command";
+            }
+
+        }
+
+        public class CommandPayload
+        {
+            public string Message {
+                get; set;
+            }
+            public bool Mode {
+                get; set;
+            }
+        }
+
+        public class SensorPayload
+        {
+            public double LightLevel {
+                get; set;
+            }
+            public double Temp {
+                get; set;
+            }
+            public double Analog {
+                get; set;
+            }
+            public double X {
+                get; set;
+            }
+            public double Y {
+                get; set;
+            }
+            public double Z {
+                get; set;
+            }
         }
     }
 }

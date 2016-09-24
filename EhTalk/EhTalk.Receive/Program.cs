@@ -4,11 +4,15 @@ using Microsoft.ServiceBus.Messaging;
 
 namespace EhTalk.Receive
 {
-    class Program
+    class _deviceClient = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Http1);Program
     {
         static void Main(string[] args)
         {
+<<<<<< HEAD
+            string eventHubConnectionString = "Endpoint=sb://trustme.servicebus.windows.net/;SharedAccessKeyName=writer;SharedAccessKey=I/1xJXFJIQ3cITHvhRrvskGtRaGzB0F6/lGMgEWjE1g=";
+=======
             string eventHubConnectionString = "Endpoint=sb://trustme.servicebus.windows.net/;SharedAccessKeyName=reader;SharedAccessKey=jmNsxYKoYw3fV2XdfuDdWE5x2EdT3BTu5UKkR+8gFH8=";
+>>>>>>> bd4ea5fa9f70b072d4afadd943d4af94cb9fba64
             string eventHubName = "nddtest";
             string storageAccountName = "pulcherstorage1";
             string storageAccountKey = "8KAT7HqDpKNKltJ5u/OXEyMHPeyKUueEDhr5Lw3uEe3Xp4jqO201Pk2ZrH2/XvegXOkfSytm4R8APmgNfNastg==";
