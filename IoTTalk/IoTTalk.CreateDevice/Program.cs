@@ -11,7 +11,7 @@ namespace IoTTalk.CreateDevice
     class Program
     {
         static RegistryManager registryManager;
-        static string connectionString = "HostName=ddnugIotHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=wP/ckbU+J/QTkfmtKGtqXwWdVp+moboBj5nNdzKBbcs=";
+        static string connectionString = "HostName=pulcher.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=3XFxFitmMLMFCCmr0MfQYfsQ1L2C3GtGSAXbM0wC6Bc=";
 
         static void Main(string[] args)
         {
@@ -24,10 +24,10 @@ namespace IoTTalk.CreateDevice
 
         private async static Task AddDeviceAsync()
         {
-            var simulatedDeviceId = "myIotDevice";
+            var simulatedDeviceId = "myIotDeviceHTF";
             Device simulatedDevice;
 
-            var uwpDeviceId = "uwpDevice";
+            var uwpDeviceId = "uwpDeviceHTF";
             Device uwpDevice;
 
             try
@@ -37,7 +37,7 @@ namespace IoTTalk.CreateDevice
             catch (DeviceAlreadyExistsException)
             {
                 simulatedDevice = await registryManager.GetDeviceAsync(simulatedDeviceId);
-                Console.WriteLine("Retrievig existing device id");
+                Console.WriteLine("Retrieving existing device id");
             }
 
             try

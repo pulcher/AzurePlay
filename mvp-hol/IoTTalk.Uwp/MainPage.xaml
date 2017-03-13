@@ -1,0 +1,32 @@
+﻿<Page
+    x:Class="IoTTalk.Uwp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IoTTalk.Uwp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Name="MainGrid" Background="White" BorderThickness="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="115"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" 
+                    VerticalAlignment="Center" BorderThickness="2" Margin="30,38,0,31" Width="1842" Height="886">
+            <StackPanel BorderThickness="2" Width="775">
+                <TextBlock Name="LblLightTextBox" Text="Light"        FontSize="128" Margin="15"/>
+                <TextBlock Name="LblTempBox"      Text="Temp"         FontSize="128" Margin="15"/>
+                <TextBlock Name="LblAccelBox"     Text="Acceleration" FontSize="128" Margin="15"/>
+                <TextBlock Name="LblAnalogBox"    Text="Analog"       FontSize="128" Margin="15"/>
+            </StackPanel>
+            <StackPanel BorderThickness="2" Width="988">
+                <TextBlock Name="LightTextBox"  FontSize="128" Margin="15"/>
+                <TextBlock Name="TempBox"       FontSize="128" Margin="15"/>
+                <TextBlock Name="AccelBox"      FontSize="128" Margin="15"/>
+                <TextBlock Name="AnalogBox"     FontSize="128" Margin="15"/>
+            </StackPanel>
+        </StackPanel>
+        <TextBlock Name="ErrorBox" Text="All good" Grid.Row="1"></TextBlock>
+    </Grid>
+</Page>

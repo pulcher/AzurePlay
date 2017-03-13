@@ -17,6 +17,7 @@ namespace IoTTalk.Uwp
         static double lightLevel, x, y, z, temp, analog;
         static DeviceClient _deviceClient;
         static bool _nightMode = false;
+        static FEZHAT.Color _ledColor = FEZHAT.Color.Green;
         static string _receivedCommand = "blah";
 
         private FEZHAT _hat;
@@ -61,6 +62,20 @@ namespace IoTTalk.Uwp
                 analog = _hat.ReadAnalog(FEZHAT.AnalogPin.Ain1);
 
                 _hat.GetAcceleration(out x, out y, out z);
+
+                if(_ledColor.G == 255)
+                {
+                    _ledColor = FEZHAT.Color.Magneta;
+                    _hat.D2.Color = FEZHAT.Color.Magneta;
+                    _hat.D3.Color = FEZHAT.Color.Green;
+                }
+                else
+                {
+                    _ledColor = FEZHAT.Color.Green;
+                    _hat.D2.Color = FEZHAT.Color.Green;
+                    _hat.D3.Color = FEZHAT.Color.Magneta;
+                }
+                
             }
 
             SendDeviceToCloudMessagesAsync(_deviceClient);
