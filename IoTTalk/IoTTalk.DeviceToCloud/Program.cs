@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IotTalk.Common;
+using Microsoft.Azure.Devices;
 using Microsoft.ServiceBus.Messaging;
+using Newtonsoft.Json;
 
 namespace IoTTalk.DeviceToCloud
 {
     class Program
     {
-        static string connectionString = "HostName=ddnugIotHub.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=RBkZQjQzBm5HiqqRyDUfIbNGX2yeoCDroBtarhRP3/c=";
+        static string connectionString = "HostName=pulcher.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=IXkhQZRYAbo/dUEdnjLZrwTSD1LP/wsOs3s81Y7aZn0=";
         static string iotHubD2cEndpoint = "messages/events";
         static EventHubClient eventHubClient;
 
@@ -41,7 +42,20 @@ namespace IoTTalk.DeviceToCloud
 
                 var data = Encoding.UTF8.GetString(eventData.GetBytes());
 
+                var otherData = JsonConvert.DeserializeObject<SensorPayload>(data); //new Message(eventData.GetBytes());
+
+                var sysproperties = new StringBuilder();
+
+                foreach(var item in eventData.SystemProperties)
+                {
+                    sysproperties.Append($"key: {item.Key} ");
+                    sysproperties.Append($"value: {item.Value}\n");
+                }
+                var deviceId = eventData.SystemProperties["iothub-connection-device-id"];
+
                 Console.WriteLine("Message received. Partition: {0} Data: {1}", partition, data);
+                Console.WriteLine($"Device Id: {deviceId}");
+                Console.WriteLine(sysproperties.ToString());
             }
         }
     }
