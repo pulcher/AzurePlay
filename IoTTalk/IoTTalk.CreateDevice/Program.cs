@@ -24,10 +24,10 @@ namespace IoTTalk.CreateDevice
 
         private async static Task AddDeviceAsync()
         {
-            var simulatedDeviceId = "myIotDeviceHTF";
+            var simulatedDeviceId = "myIotRoundTable";
             Device simulatedDevice;
 
-            var uwpDeviceId = "uwpDeviceHTF";
+            var uwpDeviceId = "uwpDeviceRoundTable";
             Device uwpDevice;
 
             try
