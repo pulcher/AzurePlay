@@ -166,7 +166,7 @@ namespace robot_overlords
 
             if (emotionResult != null && emotionResult.Length > 0)
             {
-                Windows.Storage.Streams.IRandomAccessStream stream = await Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(new Uri(urlString)).OpenReadAsync();
+                IRandomAccessStream stream = await RandomAccessStreamReference.CreateFromUri(new Uri(urlString)).OpenReadAsync();
 
 
                 BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
@@ -184,7 +184,7 @@ namespace robot_overlords
                     Image Img = new Image();
                     BitmapImage BitImg = new BitmapImage();
                     // open the rectangle image, this will be our face box
-                    Windows.Storage.Streams.IRandomAccessStream box = await Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/rectangle.png", UriKind.Absolute)).OpenReadAsync();
+                    IRandomAccessStream box = await RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/rectangle.png", UriKind.Absolute)).OpenReadAsync();
 
                     BitImg.SetSource(box);
 
