@@ -45,7 +45,7 @@ namespace robot_overlords
 
             ImageCanvas.Children.Clear();
 
-            string urlString = ImageURL.Text;
+            string urlString = string.Empty; // ImageURL.Text;
             Uri uri;
             try
             {
