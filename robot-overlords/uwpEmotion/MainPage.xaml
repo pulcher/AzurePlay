@@ -7,7 +7,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="5" Margin="50" >
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="5" Margin="10" >
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -17,14 +17,14 @@
 
         <StackPanel Grid.Column="0" VerticalAlignment="Center">
 
-            <Border BorderBrush="Black" BorderThickness="1" Margin="20" Width="600" Height="600">
-                <Canvas x:Name="ImageCanvas" Width="598" Height="598"/>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Width="350" Height="300">
+                <Canvas x:Name="ImageCanvas" Width="348" Height="348"/>
                 <!-- <Image x:Name="SampleImage" Stretch="Uniform" Width="600" Height="550" Margin="10"/> -->
             </Border>
-            <TextBlock Grid.Row="1" x:Name="detectionStatus" Width="600" HorizontalAlignment="Center" Margin="10"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="600" Margin="10">
-                <TextBox x:Name="ImageURL" Width="440" HorizontalAlignment="Left" Margin="0,0,10,0" Text="http://blogs.cdc.gov/genomics/files/2015/11/ThinkstockPhotos-177826416.jpg"/>
-                <Button Content="Detect Emotions" Width="140" HorizontalAlignment="Left" Click="button_Clicked"/>
+            <TextBlock Grid.Row="1" x:Name="detectionStatus" Width="345" HorizontalAlignment="Center" Margin="10"/>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="338" Margin="10">
+                <TextBox x:Name="ImageURL" Width="348" HorizontalAlignment="Center" Margin="0,0,10,0" Text="http://blogs.cdc.gov/genomics/files/2015/11/ThinkstockPhotos-177826416.jpg"/>
+                <Button Content="Detect Emotions" Width="140" HorizontalAlignment="Center" Click="button_Clicked"/>
             </StackPanel>
         </StackPanel>
 
