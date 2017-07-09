@@ -91,7 +91,7 @@ namespace uwpEmotion
             }
         }
 
-        private async void displayParsedResults(Emotion[] resultList)
+        private void displayParsedResults(Emotion[] resultList)
         {
             int index = 0;
             string textToDisplay = "";

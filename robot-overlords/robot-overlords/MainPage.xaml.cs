@@ -1,89 +1,110 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Windows.Graphics.Imaging;
+﻿using Microsoft.ProjectOxford.Common;
 using Microsoft.ProjectOxford.Emotion;
 using Microsoft.ProjectOxford.Emotion.Contract;
-using System.Threading.Tasks;
+using System;
 using System.Diagnostics;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Shapes;
-using Windows.UI;
-using Windows.UI.Popups;
+using System.IO;
+using System.Threading.Tasks;
+using Windows.Graphics.Imaging;
+using Windows.Media.Capture;
+using Windows.Media.MediaProperties;
+using Windows.Storage;
 using Windows.Storage.Streams;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace robot_overlords
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         private string _subscriptionKey = " 85ce8f79af0248a6910259be8eab3931";
-        BitmapImage bitMapImage;
+        private readonly string PHOTO_FILE_NAME = "roboPhoto.jpg";
+
+        private MediaCapture mediaCapture;
+        private StorageFile photoFile;
+        private BitmapImage bitmapImage;
+        private IRandomAccessStream photoStream;
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+
+            InitializeCamera();
+        }
+
+        private async void InitializeCamera()
+        {
+            try
+            {
+                status.Text = "Initializing camera to capture audio and video...";
+                // Use default initialization
+                mediaCapture = new MediaCapture();
+                await mediaCapture.InitializeAsync();
+
+                // Set callbacks for failure and recording limit exceeded
+                status.Text = "Device successfully initialized for video recording!";
+                mediaCapture.Failed += new MediaCaptureFailedEventHandler(mediaCapture_Failed);
+                
+                // Start Preview                
+                ImageCapture.Source = mediaCapture;
+                await mediaCapture.StartPreviewAsync();
+                status.Text = "Camera preview succeeded";
+            }
+            catch (Exception ex)
+            {
+                status.Text = "Unable to initialize camera for audio/video mode: " + ex.Message;
+            }
+        }
+
+        private async void mediaCapture_Failed(MediaCapture currentCaptureObject, MediaCaptureFailedEventArgs currentFailure)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                try
+                {
+                    status.Text = "MediaCaptureFailed: " + currentFailure.Message;
+                }
+                catch (Exception)
+                {
+                }
+                finally
+                {
+                    status.Text += "\nCheck if camera is diconnected. Try re-launching the app";
+                }
+            });
         }
 
         private async void button_Clicked(object sender, RoutedEventArgs e)
         {
 
-            ImageCanvas.Children.Clear();
-
-            string urlString = string.Empty; // ImageURL.Text;
-            Uri uri;
-            try
-            {
-                uri = new Uri(urlString, UriKind.Absolute);
-            }
-            catch (UriFormatException ex)
-            {
-                Debug.WriteLine(ex.Message);
-
-                var dialog = new MessageDialog("URL is not correct");
-
-                await dialog.ShowAsync();
-
-                return;
-            }
-
-            //Load image from URL
-            bitMapImage = new BitmapImage();
-            bitMapImage.UriSource = uri;
-
-            ImageBrush imageBrush = new ImageBrush();
-            imageBrush.ImageSource = bitMapImage;
-
-            //Load image to UI
-            ImageCanvas.Background = imageBrush;
-
             detectionStatus.Text = "Detecting...";
 
-            //urlString = "http://blogs.cdc.gov/genomics/files/2015/11/ThinkstockPhotos-177826416.jpg"
+            try
+            {
+                photoFile = await KnownFolders.PicturesLibrary.CreateFileAsync(
+                    PHOTO_FILE_NAME, CreationCollisionOption.GenerateUniqueName);
+                ImageEncodingProperties imageProperties = ImageEncodingProperties.CreateJpeg();
+                await mediaCapture.CapturePhotoToStorageFileAsync(imageProperties, photoFile);
+                status.Text = "Take Photo succeeded: " + photoFile.Path;
 
-            Emotion[] emotionResult = await UploadAndDetectEmotions(urlString);
+                photoStream = await photoFile.OpenReadAsync();
+                bitmapImage = new BitmapImage();
+                bitmapImage.SetSource(photoStream);
+            }
+            catch (Exception ex)
+            {
+                status.Text = ex.Message;
+            }
+
+            Emotion[] emotionResult = await UploadAndDetectEmotions();
 
             detectionStatus.Text = "Detection Done";
 
             displayParsedResults(emotionResult);
             displayAllResults(emotionResult);
-            DrawFaceRectangle(emotionResult, bitMapImage, urlString);
-
         }
 
         private void displayAllResults(Emotion[] resultList)
@@ -172,8 +193,8 @@ namespace robot_overlords
                 BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
 
 
-                double resizeFactorH = ImageCanvas.Height / decoder.PixelHeight;
-                double resizeFactorW = ImageCanvas.Width / decoder.PixelWidth;
+                //double resizeFactorH = ImageCanvas.Height / decoder.PixelHeight;
+                //double resizeFactorW = ImageCanvas.Width / decoder.PixelWidth;
 
 
                 foreach (var emotion in emotionResult)
@@ -189,38 +210,37 @@ namespace robot_overlords
                     BitImg.SetSource(box);
 
                     //rescale each facebox based on the API's face rectangle
-                    var maxWidth = faceRect.Width * resizeFactorW;
-                    var maxHeight = faceRect.Height * resizeFactorH;
+                    //var maxWidth = faceRect.Width * resizeFactorW;
+                    //var maxHeight = faceRect.Height * resizeFactorH;
 
                     var origHeight = BitImg.PixelHeight;
                     var origWidth = BitImg.PixelWidth;
 
 
-                    var ratioX = maxWidth / (float)origWidth;
-                    var ratioY = maxHeight / (float)origHeight;
-                    var ratio = Math.Min(ratioX, ratioY);
-                    var newHeight = (int)(origHeight * ratio);
-                    var newWidth = (int)(origWidth * ratio);
+                    //var ratioX = maxWidth / (float)origWidth;
+                    //var ratioY = maxHeight / (float)origHeight;
+                    //var ratio = Math.Min(ratioX, ratioY);
+                    //var newHeight = (int)(origHeight * ratio);
+                    //var newWidth = (int)(origWidth * ratio);
 
-                    BitImg.DecodePixelWidth = newWidth;
-                    BitImg.DecodePixelHeight = newHeight;
+                    //BitImg.DecodePixelWidth = newWidth;
+                    //BitImg.DecodePixelHeight = newHeight;
 
                     // set the starting x and y coordiantes for each face box
                     Thickness margin = Img.Margin;
 
-                    margin.Left = faceRect.Left * resizeFactorW;
-                    margin.Top = faceRect.Top * resizeFactorH;
+                    //margin.Left = faceRect.Left * resizeFactorW;
+                    //margin.Top = faceRect.Top * resizeFactorH;
 
                     Img.Margin = margin;
 
                     Img.Source = BitImg;
-                    ImageCanvas.Children.Add(Img);
+                    //ImageCanvas.Children.Add(Img);
                 }
             }
         }
 
-
-        private async Task<Emotion[]> UploadAndDetectEmotions(string url)
+        private async Task<Emotion[]> UploadAndDetectEmotions()
         {
             Debug.WriteLine("EmotionServiceClient is created");
 
@@ -232,11 +252,23 @@ namespace robot_overlords
             Debug.WriteLine("Calling EmotionServiceClient.RecognizeAsync()...");
             try
             {
+                //var stream = await File.OpenRead(photoFile.Path);
+
                 //
                 // Detect the emotions in the URL
                 //
-                Emotion[] emotionResult = await emotionServiceClient.RecognizeAsync(url);
+
+                // make sure the stream is at the start
+                photoStream.Seek(0);
+
+                Emotion[] emotionResult = await emotionServiceClient.RecognizeAsync(photoStream.AsStreamForRead());
                 return emotionResult;
+            }
+            catch (ClientException ex)
+            {
+                Debug.WriteLine($"Detection failed. ClientExpection thrown {ex.Message}");
+                Debug.WriteLine(ex.ToString());
+                return null;
             }
             catch (Exception exception)
             {

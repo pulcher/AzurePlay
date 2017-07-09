@@ -18,11 +18,13 @@
         <StackPanel Grid.Column="0" VerticalAlignment="Center">
 
             <Border BorderBrush="Black" BorderThickness="2" Margin="5" Width="350" Height="350">
-                <Canvas x:Name="ImageCanvas" Width="347" Height="347"/>
-                <!-- <Image x:Name="SampleImage" Stretch="Uniform" Width="600" Height="550" Margin="10"/> -->
+                <Canvas x:Name="ImagePreview" Width="347" Height="347">
+                    <CaptureElement x:Name="ImageCapture" Width="345" Height="345" HorizontalAlignment="center" VerticalAlignment="Center"
+                                    Visibility="Visible"/>
+                </Canvas>
             </Border>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="350" Margin="2">
-                <TextBlock Grid.Row="1" x:Name="detectionStatus" Width="350" HorizontalAlignment="Center" Margin="2"/>
+                <TextBlock x:Name="detectionStatus" Width="350" HorizontalAlignment="Center" Margin="2"/>
                 <Button Content="Take Picture" Width="350" HorizontalAlignment="Center" Click="button_Clicked"/>
             </StackPanel>
         </StackPanel>
