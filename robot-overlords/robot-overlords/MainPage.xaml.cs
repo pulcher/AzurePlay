@@ -1,19 +1,19 @@
-﻿using Microsoft.ProjectOxford.Common;
+﻿using GoPiGo;
+using GoPiGo.Sensors;
+using Microsoft.ProjectOxford.Common;
 using Microsoft.ProjectOxford.Emotion;
 using Microsoft.ProjectOxford.Emotion.Contract;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using Windows.Graphics.Imaging;
 using Windows.Media.Capture;
 using Windows.Media.MediaProperties;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace robot_overlords
@@ -21,18 +21,58 @@ namespace robot_overlords
     public sealed partial class MainPage : Page
     {
         private string _subscriptionKey = " 85ce8f79af0248a6910259be8eab3931";
-        private readonly string PHOTO_FILE_NAME = "roboPhoto.jpg";
+        private readonly string _photoFileName = "roboPhoto.jpg";
+        private readonly int _defaultSpeed = 96;
+        private readonly int _slowSpeed = 64;
 
         private MediaCapture mediaCapture;
         private StorageFile photoFile;
         private BitmapImage bitmapImage;
         private IRandomAccessStream photoStream;
+        private IBuildGoPiGoDevices deviceFactory;
+        private IGoPiGo goPiGo;
+        private ILed led1;
+        private ILed led2;
 
         public MainPage()
         {
             InitializeComponent();
 
+            InitializeGoPiGo();
+
             InitializeCamera();
+        }
+
+        private void InitializeGoPiGo()
+        {
+            deviceFactory = DeviceFactory.Build;
+
+            goPiGo = deviceFactory.BuildGoPiGo();
+
+            led1 = deviceFactory.BuildLed(Pin.LedLeft);
+            led2 = deviceFactory.BuildLed(Pin.LedRight);
+
+            // clean up in case something went bad
+            goPiGo.MotorController().Stop();
+
+            goPiGo.MotorController().SetRightMotorSpeed(_defaultSpeed);
+            goPiGo.MotorController().SetLeftMotorSpeed(_defaultSpeed);
+
+            BlinkAll(500, 3);
+        }
+
+        private void BlinkAll(int duration, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                led1.ChangeState(SensorStatus.On);
+                led2.ChangeState(SensorStatus.On);
+                Task.Delay(duration);
+                led1.ChangeState(SensorStatus.Off);
+                led2.ChangeState(SensorStatus.Off);
+                Task.Delay(duration/2);
+
+            }
         }
 
         private async void InitializeCamera()
@@ -85,7 +125,7 @@ namespace robot_overlords
             try
             {
                 photoFile = await KnownFolders.PicturesLibrary.CreateFileAsync(
-                    PHOTO_FILE_NAME, CreationCollisionOption.GenerateUniqueName);
+                    _photoFileName, CreationCollisionOption.GenerateUniqueName);
                 ImageEncodingProperties imageProperties = ImageEncodingProperties.CreateJpeg();
                 await mediaCapture.CapturePhotoToStorageFileAsync(imageProperties, photoFile);
                 status.Text = "Take Photo succeeded: " + photoFile.Path;
@@ -105,6 +145,58 @@ namespace robot_overlords
 
             displayParsedResults(emotionResult);
             displayAllResults(emotionResult);
+
+            await actOnResults(emotionResult);
+        }
+
+        private async Task actOnResults(Emotion[] emotionResults)
+        {
+            int index = 0;
+            foreach (Emotion emotion in emotionResults)
+            {
+                var emotionRank = emotion.Scores.ToRankedList();
+
+                var currentEmotion = emotionRank.First().Key;
+
+                // indicate which person it is responding to
+                BlinkAll(500, index + 1);
+                await Task.Delay(20);  // I think I have a timing issue here
+
+                switch (currentEmotion)
+                {
+                    case "Anger":
+                        goPiGo.MotorController().MoveBackward();
+                        await Task.Delay(2000);
+                        break;
+                    case "Happiness":
+                        goPiGo.MotorController().RotateLeft();
+                        await Task.Delay(500);
+                        goPiGo.MotorController().RotateRight();
+                        await Task.Delay(1000);
+                        goPiGo.MotorController().RotateLeft();
+                        await Task.Delay(500);
+                        break;
+                    case "Sadness":
+                        goPiGo.MotorController().SetLeftMotorSpeed(_slowSpeed);
+                        await Task.Delay(20);
+                        goPiGo.MotorController().SetRightMotorSpeed(_slowSpeed);
+                        await Task.Delay(20);
+                        goPiGo.MotorController().MoveForward();
+                        await Task.Delay(2000);
+                        goPiGo.MotorController().SetLeftMotorSpeed(_defaultSpeed);
+                        await Task.Delay(20);
+                        goPiGo.MotorController().SetRightMotorSpeed(_defaultSpeed);
+                        await Task.Delay(20);
+                        break;
+                    default:
+                        break;
+                }
+
+                goPiGo.MotorController().Stop();
+                await Task.Delay(20);
+
+                index++;
+            }
         }
 
         private void displayAllResults(Emotion[] resultList)
@@ -118,6 +210,8 @@ namespace robot_overlords
                 + "\nDisgust: " + emotion.Scores.Disgust
                 + "\nFear: " + emotion.Scores.Fear
                 + "\nHappiness: " + emotion.Scores.Happiness
+                + "\nNeutral: " + emotion.Scores.Neutral
+                + "\nSadness: " + emotion.Scores.Sadness
                 + "\nSurprise: " + emotion.Scores.Surprise);
 
                 index++;
@@ -169,6 +263,18 @@ namespace robot_overlords
                 topScore = emotion.Scores.Happiness;
                 topEmotion = "Happiness";
             }
+            // Neutral
+            if (topScore < emotion.Scores.Neutral)
+            {
+                topScore = emotion.Scores.Neutral;
+                topEmotion = "Neutral";
+            }
+            // sadness
+            if (topScore < emotion.Scores.Sadness)
+            {
+                topScore = emotion.Scores.Sadness;
+                topEmotion = "Sadness";
+            }
             // surprise
             if (topScore < emotion.Scores.Surprise)
             {
@@ -176,68 +282,8 @@ namespace robot_overlords
                 topEmotion = "Surprise";
             }
 
-            retString = "is expressing " + topEmotion + " with " + topScore.ToString() + " certainty.";
+            retString = "is expressing " + topEmotion + "\n with " + topScore.ToString() + " certainty.";
             return retString;
-        }
-
-
-        public async void DrawFaceRectangle(Emotion[] emotionResult, BitmapImage bitMapImage, String urlString)
-        {
-
-
-            if (emotionResult != null && emotionResult.Length > 0)
-            {
-                IRandomAccessStream stream = await RandomAccessStreamReference.CreateFromUri(new Uri(urlString)).OpenReadAsync();
-
-
-                BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
-
-
-                //double resizeFactorH = ImageCanvas.Height / decoder.PixelHeight;
-                //double resizeFactorW = ImageCanvas.Width / decoder.PixelWidth;
-
-
-                foreach (var emotion in emotionResult)
-                {
-
-                    Microsoft.ProjectOxford.Common.Rectangle faceRect = emotion.FaceRectangle;
-
-                    Image Img = new Image();
-                    BitmapImage BitImg = new BitmapImage();
-                    // open the rectangle image, this will be our face box
-                    IRandomAccessStream box = await RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/rectangle.png", UriKind.Absolute)).OpenReadAsync();
-
-                    BitImg.SetSource(box);
-
-                    //rescale each facebox based on the API's face rectangle
-                    //var maxWidth = faceRect.Width * resizeFactorW;
-                    //var maxHeight = faceRect.Height * resizeFactorH;
-
-                    var origHeight = BitImg.PixelHeight;
-                    var origWidth = BitImg.PixelWidth;
-
-
-                    //var ratioX = maxWidth / (float)origWidth;
-                    //var ratioY = maxHeight / (float)origHeight;
-                    //var ratio = Math.Min(ratioX, ratioY);
-                    //var newHeight = (int)(origHeight * ratio);
-                    //var newWidth = (int)(origWidth * ratio);
-
-                    //BitImg.DecodePixelWidth = newWidth;
-                    //BitImg.DecodePixelHeight = newHeight;
-
-                    // set the starting x and y coordiantes for each face box
-                    Thickness margin = Img.Margin;
-
-                    //margin.Left = faceRect.Left * resizeFactorW;
-                    //margin.Top = faceRect.Top * resizeFactorH;
-
-                    Img.Margin = margin;
-
-                    Img.Source = BitImg;
-                    //ImageCanvas.Children.Add(Img);
-                }
-            }
         }
 
         private async Task<Emotion[]> UploadAndDetectEmotions()
