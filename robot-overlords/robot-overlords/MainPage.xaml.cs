@@ -20,7 +20,7 @@ namespace robot_overlords
 {
     public sealed partial class MainPage : Page
     {
-        private string _subscriptionKey = " 85ce8f79af0248a6910259be8eab3931";
+        private string _subscriptionKey = "853ab345c1764ff8a3ae6d2507b1ec18";
         private readonly string _photoFileName = "roboPhoto.jpg";
         private readonly int _defaultSpeed = 96;
         private readonly int _slowSpeed = 64;

@@ -148,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="GoPiGo">
-      <HintPath>..\..\..\GoPiGo.Net\GoPiGo\bin\ARM\Debug\GoPiGo.dll</HintPath>
+      <HintPath>..\..\..\GoPiGo.Net\GoPiGo\bin\Debug\GoPiGo.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

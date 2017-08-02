@@ -11,8 +11,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
 namespace uwpEmotion
 {
     /// <summary>
@@ -20,7 +18,8 @@ namespace uwpEmotion
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private string _subscriptionKey = " 85ce8f79af0248a6910259be8eab3931";
+        // private string _subscriptionKey = " 85ce8f79af0248a6910259be8eab3931";
+        private string _subscriptionKey = "853ab345c1764ff8a3ae6d2507b1ec18";
         BitmapImage bitMapImage;
 
         public MainPage()
