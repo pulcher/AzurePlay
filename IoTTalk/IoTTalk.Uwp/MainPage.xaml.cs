@@ -148,6 +148,8 @@ namespace IoTTalk.Uwp
         // Receive messages from IoT Hub
         static async void ReceiveCommands(DeviceClient deviceClient)
         {
+            // sample JSON {"Message":"this is a thing","Mode": 0}
+
             Message receivedMessage = null;
             string data;
 
@@ -157,12 +159,22 @@ namespace IoTTalk.Uwp
             if(receivedMessage != null)
             {
                 data = Encoding.ASCII.GetString(receivedMessage.GetBytes());
-                var otherData = JsonConvert.DeserializeObject<CommandPayload>(data);
 
-                if (!string.IsNullOrEmpty(otherData.Message))
-                    _nightMode = otherData.Mode;
+                try
+                {
+                    var otherData = JsonConvert.DeserializeObject<CommandPayload>(data);
 
-                _receivedCommand = data;
+                    if (!string.IsNullOrEmpty(otherData.Message))
+                        _nightMode = otherData.Mode;
+
+                    _receivedCommand = data;
+                }
+                catch (Exception ex)
+                {
+                    var test = ex;
+                    // eating this for now.  someone sent in some trash
+                }
+
                 await deviceClient.CompleteAsync(receivedMessage);
             }
             else

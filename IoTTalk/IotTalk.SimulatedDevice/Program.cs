@@ -13,8 +13,6 @@ namespace IotTalk.SimulatedDevice
     {
         static DeviceClient deviceClient;
         static string connectionString = "HostName=pulcher.azure-devices.net;DeviceId=p-virtual-sender;SharedAccessKey=txb5Kob1N6IWGCiWmhPPJwuxa5etzr2cCgzlgryZNPM=";
-        //static string iotHubUri = "ddnugIotHub.azure-devices.net";
-        //static string deviceKey = "m230f0zWdI+WC2YImQte63zeEpgEVU6TB8jUcIbsnwU=";
         static string deviceId = "p-virtual-send";
 
         static void Main(string[] args)
@@ -22,7 +20,6 @@ namespace IotTalk.SimulatedDevice
             Console.WriteLine("Simulated device:\n");
 
             deviceClient = DeviceClient.CreateFromConnectionString(connectionString);
-            //deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey));
 
             SendDeviceToCloudMessagesAsync();
 
@@ -41,7 +38,7 @@ namespace IotTalk.SimulatedDevice
                 var telemetryDataPoint = new
                 {
                     deviceId = deviceId,
-                    windoSpeed = currentWindSpeed
+                    windSpeed = currentWindSpeed
                 };
 
                 var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
